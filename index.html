@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Архангел</title>
+
+<style>
+*{box-sizing:border-box}
+body{
+margin:0;
+font-family:Arial, Helvetica, sans-serif;
+color:white;
+background:#050507;
+overflow-x:hidden;
+}
+
+#particles{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+z-index:-1;
+}
+
+.container{
+max-width:950px;
+margin:auto;
+padding:40px 20px;
+}
+
+.card{
+backdrop-filter: blur(18px);
+background: rgba(255,255,255,0.06);
+border:1px solid rgba(255,255,255,0.18);
+border-radius:20px;
+padding:40px;
+margin-bottom:40px;
+box-shadow:0 10px 50px rgba(0,0,0,0.6);
+
+opacity:0;
+transform:translateY(60px);
+transition:all 0.8s ease;
+}
+
+.card.show{
+opacity:1;
+transform:translateY(0);
+}
+
+.header{text-align:center}
+
+.profile-img{
+width:160px;
+height:160px;
+border-radius:50%;
+object-fit:cover;
+border:3px solid rgba(255,255,255,0.6);
+margin-bottom:20px;
+}
+
+h1{
+margin:10px 0;
+font-size:40px;
+}
+
+.typing{
+font-size:20px;
+opacity:0.9;
+min-height:28px;
+}
+
+p{
+font-size:18px;
+line-height:1.6;
+opacity:0.9;
+}
+
+.chart{
+margin-top:20px;
+border-radius:15px;
+overflow:hidden;
+}
+
+.telegram{
+display:inline-block;
+margin-top:15px;
+padding:12px 22px;
+background:#229ED9;
+color:white;
+text-decoration:none;
+border-radius:10px;
+font-weight:bold;
+}
+
+@media (max-width:700px){
+
+h1{font-size:30px}
+
+.card{padding:25px}
+
+.profile-img{
+width:120px;
+height:120px;
+}
+
+p{font-size:16px}
+
+}
+</style>
+</head>
+
+<body>
+
+<canvas id="particles"></canvas>
+
+<div class="container">
+
+<div class="card header">
+
+<img src="photo_2026-02-24_22-10-08.jpg" class="profile-img" alt="Моя фотография">
+
+<h1>Архангел</h1>
+
+<div class="typing" id="typing"></div>
+
+</div>
+
+
+
+<div class="card">
+<h2>График TON </h2>
+
+<div class="chart">
+
+<div class="tradingview-widget-container">
+  <div id="tradingview_ton"></div>
+  <script src="https://s3.tradingview.com/tv.js"></script>
+  <script>
+  new TradingView.widget({
+  "width": "100%",
+  "height": 400,
+  "symbol": "BINANCE:TONUSDT",
+  "interval": "15",
+  "timezone": "Etc/UTC",
+  "theme": "dark",
+  "style": "1",
+  "locale": "ru",
+  "toolbar_bg": "#050507",
+  "enable_publishing": false,
+  "hide_top_toolbar": false,
+  "container_id": "tradingview_ton"
+});
+  </script>
+</div>
+</div>
+
+</div>
+
+<div class="card" style="text-align:center">
+<h2>Связь со мной</h2>
+<a class="telegram" href="https://t.me/akwya" target="_blank">Написать в Telegram</a>
+</div>
+
+</div>
+
+<script>
+
+const text = "сделаю вам такой сайтик за звезды / голд / рубли 💀💀💀";
+let i = 0;
+
+function typing(){
+ if(i < text.length){
+  document.getElementById("typing").innerHTML += text.charAt(i);
+  i++;
+  let speed = Math.random()*80 + 40;
+  setTimeout(typing, speed);
+ }
+}
+
+window.onload = typing;
+
+
+
+const canvas=document.getElementById("particles");
+const ctx=canvas.getContext("2d");
+
+canvas.width=window.innerWidth;
+canvas.height=window.innerHeight;
+
+class Particle{
+constructor(){
+this.x=Math.random()*canvas.width;
+this.y=Math.random()*canvas.height;
+this.size=Math.random()*2+1;
+this.speedX=Math.random()*1-0.5;
+this.speedY=Math.random()*1-0.5;
+}
+
+update(){
+this.x+=this.speedX;
+this.y+=this.speedY;
+}
+
+draw(){
+ctx.fillStyle="#00ffff";
+ctx.beginPath();
+ctx.arc(this.x,this.y,this.size,0,Math.PI*2);
+ctx.fill();
+}
+}
+
+let particlesArray=[];
+
+function init(){
+particlesArray=[];
+for(let i=0;i<120;i++){
+particlesArray.push(new Particle());
+}
+}
+
+function animate(){
+ctx.clearRect(0,0,canvas.width,canvas.height);
+
+for(let p of particlesArray){
+p.update();
+p.draw();
+}
+
+requestAnimationFrame(animate);
+}
+
+init();
+animate();
+
+window.addEventListener("resize",()=>{
+canvas.width=window.innerWidth;
+canvas.height=window.innerHeight;
+init();
+});
+
+
+const observer=new IntersectionObserver(entries=>{
+entries.forEach(entry=>{
+if(entry.isIntersecting){
+entry.target.classList.add("show");
+}
+});
+});
+
+document.querySelectorAll(".card").forEach(el=>observer.observe(el));
+
+</script>
+
+</body>
+</html>
